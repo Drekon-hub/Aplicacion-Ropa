@@ -85,18 +85,6 @@ public class InterfazNegocio extends JFrame {
     private JPanel crearPantallaCobrar(){
         JPanel p = new JPanel(new GridLayout(2, 1));
 
-        // 1. Pantalla de la calculadora (donde se ve el número)
-//        txtPantallaCobro = new JTextField("0");
-//        txtPantallaHistorial = new JTextField("0");
-//
-//        txtPantallaHistorial.setFont(new Font("Monospaced", Font.ITALIC, 25));
-//        txtPantallaHistorial.setHorizontalAlignment(JTextField.RIGHT);
-//        txtPantallaHistorial.setEditable(false); // Que no se pueda escribir con teclado
-//
-//        txtPantallaCobro.setFont(new Font("Monospaced", Font.BOLD, 30));
-//        txtPantallaCobro.setHorizontalAlignment(JTextField.RIGHT);
-//        txtPantallaCobro.setEditable(false); // Que no se pueda escribir con teclado
-
 // Creamos el contenedor con 0 espacio vertical entre filas
         JPanel panelPantallas = new JPanel(new GridLayout(2, 2, 0, -50));
         panelPantallas.setBackground(Color.WHITE); // Para que parezca una sola unidad
@@ -156,11 +144,9 @@ public class InterfazNegocio extends JFrame {
 
         switch (tecla){
             case "+" -> {
-                num1 = Integer.parseInt(txtPantallaCobro.getText());
-                txtPantallaHistorial.setText(num1 + tecla + aux);
-                txtPantallaCobro.setText("0");
                 num1 += Integer.parseInt(txtPantallaCobro.getText());
-                aux = txtPantallaHistorial.getText();
+                txtPantallaHistorial.setText(num1 + tecla);
+                txtPantallaCobro.setText("0");
                 operacionActual = "+";
 
             }
@@ -181,7 +167,15 @@ public class InterfazNegocio extends JFrame {
             }
             case "0","1","2","3","4","5","6","7","8","9" -> {
                 String actual = txtPantallaCobro.getText();
-                if (actual.equals("0")) {
+                if(aux.equals("=")){
+                    txtPantallaCobro.setText("");
+                    txtPantallaHistorial.setText("");
+                    operacionActual = "";
+                    aux = "";
+                    num1 = 0;
+                    num2 = 0;
+                    txtPantallaCobro.setText(tecla);
+                } else if (actual.equals("0")) {
                     txtPantallaCobro.setText(tecla);
                 } else {
                     txtPantallaCobro.setText(actual + tecla);
@@ -201,10 +195,11 @@ public class InterfazNegocio extends JFrame {
                 txtPantallaCobro.setText("0");
             }
             case "=" -> {
+                aux = "=";
                 switch (operacionActual) {
                     case "+" -> {
                         num2 = Integer.parseInt(txtPantallaCobro.getText());
-                        txtPantallaHistorial.setText(Integer.toString(num1) + "+" + Integer.toString(num2) + "=");
+                        txtPantallaHistorial.setText(Integer.toString(num2) + "+" + Integer.toString(num1) + "=");
                         txtPantallaCobro.setText(Integer.toString(num1 + num2));
                     }
                     case "-" -> {
